@@ -24,6 +24,15 @@ namespace AddressBookNew.Pages
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
+        /// imgBigProfile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgBigProfile;
+
+        /// <summary>
         /// lblName control.
         /// </summary>
         /// <remarks>
@@ -42,6 +51,15 @@ namespace AddressBookNew.Pages
         protected global::System.Web.UI.WebControls.Label lblUserName;
 
         /// <summary>
+        /// lblAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAddress;
+
+        /// <summary>
         /// lblMobileNo control.
         /// </summary>
         /// <remarks>
@@ -58,6 +76,24 @@ namespace AddressBookNew.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblEmail;
+
+        /// <summary>
+        /// imgPreview control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgPreview;
+
+        /// <summary>
+        /// fuProfilePhoto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuProfilePhoto;
 
         /// <summary>
         /// txtUserName control.
@@ -85,6 +121,15 @@ namespace AddressBookNew.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtEmail;
+
+        /// <summary>
+        /// txtAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAddress;
 
         /// <summary>
         /// btnSave control.

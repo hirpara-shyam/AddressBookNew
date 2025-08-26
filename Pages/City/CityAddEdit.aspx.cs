@@ -12,26 +12,39 @@ namespace AddressBookNew.Pages.City
 {
     public partial class CityAddEdit : System.Web.UI.Page
     {
+        #region XML for Storing Records
+        private void xmlData()
+        {
+            ViewState["CityRecordsXml"] = "";
+        }
+        #endregion
+
+        #region Page Load
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                xmlData();
+
                 String userID = "";
                 if (Session["UserID"] != null)
                     userID = Session["UserID"].ToString().Trim();
 
                 CommonDropDownFill.FillCountryDropDown(ddlCountry, userID);
 
-                if (Request.QueryString["CityID"] != null)
+                if (Page.RouteData.Values["CityID"] != null)
                 {
                     lblAddEdit.Text = "Edit City";
-                    FillData(Request.QueryString["CityID"].ToString().Trim());
+                    btnAddMore.Visible = false;
+                    FillData(EncryptDecrypt.Decrypt(Page.RouteData.Values["CityID"].ToString().Trim()));
                 }
                 else
                     lblAddEdit.Text = "Add City";
             }
         }
+        #endregion
 
+        #region Fill Data for Edit
         private void FillData(String CityID)
         {
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
@@ -73,7 +86,9 @@ namespace AddressBookNew.Pages.City
                     objConn.Close();
             }
         }
+        #endregion
 
+        #region On click of Save Button
         protected void btnSave_Click(object sender, EventArgs e)
         {
             SqlString countryID = SqlString.Null;
@@ -113,6 +128,7 @@ namespace AddressBookNew.Pages.City
                 if (errMessage.Trim() != "")
                 {
                     lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                    return;
                 }
 
                 if (objConn.State != System.Data.ConnectionState.Open)
@@ -121,35 +137,60 @@ namespace AddressBookNew.Pages.City
                 SqlCommand cmd = objConn.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@CityName", cityName);
-                cmd.Parameters.AddWithValue("@StateID", stateID);
-                cmd.Parameters.AddWithValue("@CountryID", countryID);
                 if (Session["UserID"] != null)
                     cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString().Trim());
 
-                if (Request.QueryString["CityID"] != null)
+                #region Multiple Records Insert
+                if (ViewState["CityRecordsXml"] != "")
                 {
-                    cmd.Parameters.AddWithValue("@CityID", Request.QueryString["CityID"].ToString().Trim());
-                    cmd.CommandText = "[PR_City_Update]";
+                    ViewState["CityRecordsXml"] = "<Cities>" + ViewState["CityRecordsXml"].ToString();
+                    ViewState["CityRecordsXml"] += "<CityNode><CityName>" + cityName.ToString() + "</CityName><StateID>" + stateID.ToString() + "</StateID><CountryID>" + countryID.ToString() + "</CountryID></CityNode>";
+                    ViewState["CityRecordsXml"] += "</Cities>";
+
+                    cmd.Parameters.AddWithValue("@xml", ViewState["CityRecordsXml"].ToString());
+                    cmd.CommandText = "[PR_City_MultiInsert]";
 
                     cmd.ExecuteNonQuery();
 
-                    Response.Redirect("~/Pages/City/CityList.aspx");
-                }
-                else
-                {
-                    cmd.CommandText = "[PR_City_Insert]";
+                    lblMessage.Text = "Cities Inserted Successfully.";
 
-                    cmd.ExecuteNonQuery();
-
-                    lblMessage.Text = "City Inserted Successfully.";
-
+                    ViewState["CityRecordsXml"] = "";
                     ddlCountry.SelectedValue = "-1";
                     ddlState.SelectedValue = "-1";
                     txtCityName.Text = "";
-                    txtCityName.Focus();
+                    ddlCountry.Focus();
                 }
+                #endregion
+                else
+                {
+                    cmd.Parameters.AddWithValue("@CityName", cityName);
+                    cmd.Parameters.AddWithValue("@StateID", stateID);
+                    cmd.Parameters.AddWithValue("@CountryID", countryID);
 
+                    if (Page.RouteData.Values["CityID"] != null)
+                    {
+                        cmd.Parameters.AddWithValue("@CityID", EncryptDecrypt.Decrypt(Page.RouteData.Values["CityID"].ToString().Trim()));
+                        //cmd.Parameters.AddWithValue("@CityID", EncryptDecrypt.Decrypt(Request.QueryString["CityID"].ToString().Trim()));
+                        cmd.CommandText = "[PR_City_Update]";
+
+                        cmd.ExecuteNonQuery();
+
+                        Response.Redirect("~/Pages/City/List");
+                    }
+                    else
+                    {
+                        cmd.CommandText = "[PR_City_Insert]";
+
+                        cmd.ExecuteNonQuery();
+
+                        lblMessage.Text = "City Inserted Successfully.";
+
+                        ddlCountry.SelectedValue = "-1";
+                        ddlState.SelectedValue = "-1";
+                        txtCityName.Text = "";
+                        txtCityName.Focus();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -161,7 +202,9 @@ namespace AddressBookNew.Pages.City
                     objConn.Close();
             }
         }
+        #endregion
 
+        #region Country Selection Changed
         protected void ddlCountry_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -175,5 +218,54 @@ namespace AddressBookNew.Pages.City
                 ddlState.Items.Clear();
             }
         }
+        #endregion
+
+        #region Button Add More Click event for Multiple Insert
+        protected void btnAddMore_Click(object sender, EventArgs e)
+        {
+            SqlString countryID = SqlString.Null;
+            SqlString stateID = SqlString.Null;
+            SqlString cityName = SqlString.Null;
+            String errMessage = "";
+
+            if (ddlCountry.SelectedValue.ToString().Trim() == "-1")
+            {
+                errMessage += " - Please Select Country <br/>";
+            }
+            else
+            {
+                countryID = ddlCountry.SelectedValue.ToString().Trim();
+            }
+            if (ddlState.SelectedValue.ToString().Trim() == "-1")
+            {
+                errMessage += " - Please Select State <br/>";
+            }
+            else
+            {
+                stateID = ddlState.SelectedValue.ToString().Trim();
+            }
+
+            if (txtCityName.Text.ToString().Trim() == "")
+            {
+                errMessage += " - Please Enter City name <br/>";
+            }
+            else
+            {
+                cityName = txtCityName.Text.ToString().Trim();
+            }
+
+            if (errMessage.Trim() != "")
+            {
+                lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                return;
+            }
+
+            ViewState["CityRecordsXml"] += "<CityNode><CityName>" + cityName.ToString() + "</CityName><StateID>" + stateID.ToString() + "</StateID><CountryID>" + countryID.ToString() + "</CountryID></CityNode>";
+            ddlCountry.SelectedValue = "-1";
+            ddlState.SelectedValue = "-1";
+            txtCityName.Text = "";
+            ddlCountry.Focus();
+        }
+        #endregion
     }
 }

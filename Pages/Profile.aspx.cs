@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -21,6 +22,7 @@ namespace AddressBookNew.Pages
             }
         }
 
+        #region Fill data of User
         private void FillUserData()
         {
             string userID = "";
@@ -51,6 +53,12 @@ namespace AddressBookNew.Pages
                         txtMobileNo.Text = dr["MobileNo"].ToString();
                         lblEmail.Text = dr["Email"].ToString();
                         txtEmail.Text = dr["Email"].ToString();
+                        lblAddress.Text = dr["Address"].ToString() ;
+                        txtAddress.Text = dr["Address"].ToString();
+
+                        imgBigProfile.ImageUrl = dr["ProfilePhotoPath"].ToString();
+                        imgPreview.ImageUrl = dr["ProfilePhotoPath"].ToString();
+                        
                     }
                 }
             }
@@ -65,18 +73,25 @@ namespace AddressBookNew.Pages
             }
 
         }
+        #endregion
 
+        #region Save Button Click
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            #region local variables
             string userID = "";
             string userName = "";
             string email = "";
             string mobileNo = "";
+            string address = "";
             string errorMessage = "";
+            String ProfilePhotoPath = "";
+            #endregion
 
             if (Session["UserID"] != null)
                 userID = Session["UserID"].ToString().Trim();
 
+            #region Server Side Validation
             if (txtUserName.Text.ToString() != "")
             {
                 userName = txtUserName.Text.ToString().Trim();
@@ -98,11 +113,42 @@ namespace AddressBookNew.Pages
             else
                 errorMessage += " - Enter mobile number <br />";
 
+            if (txtAddress.Text.ToString() != "")
+            {
+                address = txtAddress.Text.ToString().Trim();
+            }
+            else
+                errorMessage += " - Enter your address <br />";
+
+            if (fuProfilePhoto.HasFile)
+            {
+                string fileExtension = System.IO.Path.GetExtension(fuProfilePhoto.FileName).ToLower();
+                string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
+
+                if (Array.IndexOf(allowedExtensions, fileExtension) > -1)
+                {
+                    // File type is allowed, proceed with saving or processing
+                    String FolderName = "~/ProfilePhoto/";
+                    String AbsolutePath = Server.MapPath(FolderName);
+
+                    if (!Directory.Exists(AbsolutePath))
+                        Directory.CreateDirectory(AbsolutePath);
+
+                    ProfilePhotoPath = FolderName + "ProfilePhotoOf" + userID.ToString() + System.IO.Path.GetExtension(fuProfilePhoto.FileName.ToString().Trim());
+                }
+                else
+                {
+                    errorMessage += " - Invalid file type. Only JPG, PNG and JPEG files are allowed. <br/>";
+                }
+            }
+
+
             if (errorMessage != "")
             {
                 lblMessage.Text = "Kindly solve following errors <br/>" + errorMessage;
                 return;
             }
+            #endregion
 
 
             try
@@ -118,10 +164,24 @@ namespace AddressBookNew.Pages
                 cmd.Parameters.AddWithValue("@UserName", userName);
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@MobileNo", mobileNo);
+                cmd.Parameters.AddWithValue("@Address", address);
+
+                if (ProfilePhotoPath != "")
+                {
+                    cmd.Parameters.AddWithValue("@ProfilePhotoPath", ProfilePhotoPath.ToString().Trim());
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@ProfilePhotoPath", imgPreview.ImageUrl);
+                }
 
                 cmd.ExecuteNonQuery();
 
+
+                fuProfilePhoto.SaveAs(Server.MapPath(ProfilePhotoPath));
+
                 Session["UserName"] = userName;
+                Session["ProfilePath"] = ProfilePhotoPath;
                 lblMessage.Text = "Data updated successfully";
             }
             catch (Exception ex)
@@ -133,22 +193,26 @@ namespace AddressBookNew.Pages
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
 
-                Response.Redirect("~/Pages/Profile.aspx");
+                Response.Redirect("~/Pages/Profile");
             }
         }
+        #endregion
 
+        #region Save Password Button Click
         protected void btnSavePassword_Click(object sender, EventArgs e)
         {
+            #region local variables
             string userID = "";
             string oldPassword = "";
             string newPassword = "";
             string retypePassword = "";
             string errorMessage = "";
-
+            #endregion
 
             if (Session["UserID"] != null)
                 userID = Session["UserID"].ToString().Trim();
 
+            #region Server side validation
             if (txtOldPassword.Text.ToString() != "")
             {
                 oldPassword = txtOldPassword.Text.ToString().Trim();
@@ -180,6 +244,7 @@ namespace AddressBookNew.Pages
                 lblMessage.Text = "Kindly solve following errors <br/>" + errorMessage;
                 return;
             }
+            #endregion
 
             try
             {
@@ -222,10 +287,13 @@ namespace AddressBookNew.Pages
                     con.Close();
             }
         }
+        #endregion
 
+        #region Cancel Button Click
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/Profile.aspx");
+            Response.Redirect("~/Pages/Profile");
         }
+        #endregion
     }
 }

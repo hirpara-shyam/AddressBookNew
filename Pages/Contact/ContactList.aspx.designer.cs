@@ -15,15 +15,6 @@ namespace AddressBookNew.Pages.Contact
     {
 
         /// <summary>
-        /// hlContactAdd control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlContactAdd;
-
-        /// <summary>
         /// lblMessage control.
         /// </summary>
         /// <remarks>
@@ -33,6 +24,33 @@ namespace AddressBookNew.Pages.Contact
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
+        /// hlContactAdd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlContactAdd;
+
+        /// <summary>
+        /// hlExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button hlExportToExcel;
+
+        /// <summary>
+        /// btnDeleteMultiple control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeleteMultiple;
+
+        /// <summary>
         /// gvContact control.
         /// </summary>
         /// <remarks>
@@ -40,5 +58,14 @@ namespace AddressBookNew.Pages.Contact
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvContact;
+
+        /// <summary>
+        /// lblDataMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDataMessage;
     }
 }

@@ -3,10 +3,10 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="container">
+    <div class="container card p-5">
         <div class="row">
             <div class="col-md-12">
-                <h2>Contact Add Edit</h2>
+                <h2>Contact Add/Edit</h2>
             </div>
         </div>
 
@@ -15,9 +15,10 @@
                 <asp:Label runat="server" ID="lblMessage" EnableViewState="false" />
             </div>
         </div>
+        <hr />
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 card p-3 m-2">
                 <div class="row">
                     <div class="col-md-4">
                         Contact Name<span class="text-danger">*</span>
@@ -61,6 +62,7 @@
                     </div>
                 </div>
                 <br />
+                <hr />
 
                 <div class="row">
                     <div class="col">
@@ -79,8 +81,8 @@
                 <br />
             </div>
 
-            <div class="col-md-4">
-                <div class="row">
+            <div class="col-md-3">
+                <div class="row card p-2 m-2">
                     <h5>Contact Category</h5>
                     <asp:CheckBoxList ID="cblContactCategoryID" runat="server" CssClass="ms-3"></asp:CheckBoxList>
                 </div>
@@ -88,12 +90,25 @@
 
             </div>
         </div>
+        <hr />
 
-        <div class="row">
+        <%--<div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-8">
                 <asp:Button runat="server" ID="btnSave" Text="Save" CssClass="btn btn-dark btn-sm" OnClick="btnSave_Click" />
                 <asp:Button runat="server" ID="btnCancel" Text="Cancel" CssClass="btn btn-danger btn-sm" OnClick="btnCancel_Click"></asp:Button>
+            </div>
+        </div>--%>
+
+        <div class="row">
+            <div class="col-md-4">
+                <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary w-100" Text="Save" OnClick="btnSave_Click" />
+            </div>
+            <div class="col-md-4">
+                <asp:Button ID="btnAddMore" runat="server" CssClass="btn btn-primary w-100" Text="Add More" OnClick="btnAddMore_Click" />
+            </div>
+            <div class="col-md-4">
+                <asp:HyperLink ID="hlCancel" runat="server" CssClass="btn btn-light w-100" Text="Cancel" NavigateUrl="~/Pages/Contact/List" />
             </div>
         </div>
     </div>

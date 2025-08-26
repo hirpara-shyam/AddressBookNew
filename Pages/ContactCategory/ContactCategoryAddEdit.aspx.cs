@@ -12,20 +12,33 @@ namespace AddressBookNew.Pages.ContactCategory
 {
     public partial class ContactCategoryAddEdit : System.Web.UI.Page
     {
+        #region xml for Data Records
+        private void xmlData()
+        {
+            ViewState["ContactCategoryRecordsXml"] = "";
+        }
+        #endregion
+
+        #region Page Load
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                if (Request.QueryString["ContactCategoryID"] != null)
+                xmlData();
+
+                if (Page.RouteData.Values["ContactCategoryID"] != null)
                 {
                     lblAddEdit.Text = "Edit Contact Category";
-                    FillData(Request.QueryString["ContactCategoryID"].ToString().Trim());
+                    btnAddMore.Visible = false;
+                    FillData(EncryptDecrypt.Decrypt(Page.RouteData.Values["ContactCategoryID"].ToString().Trim()));
                 }
                 else
                     lblAddEdit.Text = "Add Contact Category";
             }
         }
+        #endregion
 
+        #region Fill Data for Edit
         private void FillData(SqlString ContactCategoryID)
         {
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
@@ -61,10 +74,12 @@ namespace AddressBookNew.Pages.ContactCategory
                     objConn.Close();
             }
         }
+        #endregion
 
+        #region Save button Click
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            SqlString countryName = SqlString.Null;
+            SqlString contactCategoryName = SqlString.Null;
             String errMessage = "";
 
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
@@ -76,7 +91,7 @@ namespace AddressBookNew.Pages.ContactCategory
                 }
                 else
                 {
-                    countryName = txtContactCategoryName.Text.ToString().Trim();
+                    contactCategoryName = txtContactCategoryName.Text.ToString().Trim();
                 }
 
                 if (errMessage.Trim() != "")
@@ -90,31 +105,53 @@ namespace AddressBookNew.Pages.ContactCategory
                 SqlCommand cmd = objConn.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@ContactCategoryName", countryName);
                 if (Session["UserID"] != null)
                     cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString().Trim());
 
-                if (Request.QueryString["ContactCategoryID"] != null)
+                #region Multiple Records Insert
+                if (ViewState["ContactCategoryRecordsXml"] != "")
                 {
-                    cmd.Parameters.AddWithValue("@ContactCategoryID", Request.QueryString["ContactCategoryID"].ToString().Trim());
-                    cmd.CommandText = "[PR_ContactCategory_Update]";
+                    ViewState["ContactCategoryRecordsXml"] = "<ContactCategories>" + ViewState["ContactCategoryRecordsXml"].ToString();
+                    ViewState["ContactCategoryRecordsXml"] += "<ContactCategoryNode><ContactCategoryName>" + contactCategoryName.ToString() + "</ContactCategoryName></ContactCategoryNode>";
+                    ViewState["ContactCategoryRecordsXml"] += "</ContactCategories>";
+
+                    cmd.Parameters.AddWithValue("@xml", ViewState["ContactCategoryRecordsXml"].ToString());
+                    cmd.CommandText = "[PR_ContactCategory_MultiInsert]";
 
                     cmd.ExecuteNonQuery();
 
-                    Response.Redirect("~/Pages/ContactCategory/ContactCategoryList.aspx");
-                }
-                else
-                {
-                    cmd.CommandText = "[PR_ContactCategory_Insert]";
+                    lblMessage.Text = "Contact Categories Inserted Successfully.";
 
-                    cmd.ExecuteNonQuery();
-
-                    lblMessage.Text = "Contact Category Inserted Successfully.";
-
+                    ViewState["ContactCategoryRecordsXml"] = "";
                     txtContactCategoryName.Text = "";
                     txtContactCategoryName.Focus();
                 }
+                #endregion
+                else
+                {
+                    cmd.Parameters.AddWithValue("@ContactCategoryName", contactCategoryName);
 
+                    if (Page.RouteData.Values["ContactCategoryID"] != null)
+                    {
+                        cmd.Parameters.AddWithValue("@ContactCategoryID", EncryptDecrypt.Decrypt(Page.RouteData.Values["ContactCategoryID"].ToString().Trim()));
+                        cmd.CommandText = "[PR_ContactCategory_Update]";
+
+                        cmd.ExecuteNonQuery();
+
+                        Response.Redirect("~/Pages/ContactCategory/List");
+                    }
+                    else
+                    {
+                        cmd.CommandText = "[PR_ContactCategory_Insert]";
+
+                        cmd.ExecuteNonQuery();
+
+                        lblMessage.Text = "Contact Category Inserted Successfully.";
+
+                        txtContactCategoryName.Text = "";
+                        txtContactCategoryName.Focus();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -126,5 +163,33 @@ namespace AddressBookNew.Pages.ContactCategory
                     objConn.Close();
             }
         }
+        #endregion
+
+        #region Button Add More Click event for Multiple Insert
+        protected void btnAddMore_Click(object sender, EventArgs e)
+        {
+            SqlString contactCategoryName = SqlString.Null;
+            String errMessage = "";
+
+            if (txtContactCategoryName.Text.ToString().Trim() == "")
+            {
+                errMessage += " - Please Enter Contact Category name <br/>";
+            }
+            else
+            {
+                contactCategoryName = txtContactCategoryName.Text.ToString().Trim();
+            }
+
+            if (errMessage.Trim() != "")
+            {
+                lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                return;
+            }
+
+            ViewState["ContactCategoryRecordsXml"] += "<ContactCategoryNode><ContactCategoryName>" + contactCategoryName.ToString() + "</ContactCategoryName></ContactCategoryNode>";
+            txtContactCategoryName.Text = "";
+            txtContactCategoryName.Focus();
+        }
+        #endregion
     }
 }

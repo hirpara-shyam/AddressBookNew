@@ -17,6 +17,7 @@ namespace AddressBookNew.Pages
 
         }
 
+        #region On login Click
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             SqlString userName = SqlString.Null;
@@ -67,6 +68,7 @@ namespace AddressBookNew.Pages
                     {
                         Session["UserID"] = objSDR["UserID"].ToString().Trim();
                         Session["UserName"] = objSDR["UserName"].ToString().Trim();
+                        Session["ProfilePath"] = objSDR["ProfilePhotoPath"].ToString().Trim();
 
                         Response.Redirect("~/DefaultPage.aspx", true);
                     }
@@ -87,5 +89,6 @@ namespace AddressBookNew.Pages
                     objConn.Close();
             }
         }
+        #endregion
     }
 }

@@ -33,6 +33,24 @@ namespace AddressBookNew.Pages
         protected global::System.Web.UI.WebControls.HyperLink hlAddCountry;
 
         /// <summary>
+        /// hlExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button hlExportToExcel;
+
+        /// <summary>
+        /// btnDeleteMultiple control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeleteMultiple;
+
+        /// <summary>
         /// gvCountry control.
         /// </summary>
         /// <remarks>

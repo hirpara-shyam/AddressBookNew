@@ -54,6 +54,7 @@
                     <li class="nav-item dropdown pe-3">
 
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <asp:Image ID="imgProfile" CssClass="rounded-circle" runat="server" />
                             <span class="d-none d-md-block dropdown-toggle ps-2">
                                 <asp:Label ID="lblUserName" runat="server" EnableViewState="false"></asp:Label></span>
                         </a>
@@ -117,35 +118,35 @@
                 </li>
 
                 <li class="nav-item">
-                    <asp:HyperLink ID="HyperLink1" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/Country/CountryList.aspx">
+                    <asp:HyperLink ID="HyperLink1" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/Country/List">
                         <i class="bi bi-grid"></i>
                         <span>Country</span>
                     </asp:HyperLink>
                 </li>
 
                 <li class="nav-item">
-                    <asp:HyperLink ID="HyperLink2" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/State/StateList.aspx">
+                    <asp:HyperLink ID="HyperLink2" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/State/List">
                         <i class="bi bi-grid"></i>
                         <span>State</span>
                     </asp:HyperLink>
                 </li>
 
                 <li class="nav-item">
-                    <asp:HyperLink ID="HyperLink3" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/City/CityList.aspx">
+                    <asp:HyperLink ID="HyperLink3" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/City/List">
                         <i class="bi bi-grid"></i>
                         <span>City</span>
                     </asp:HyperLink>
                 </li>
 
                 <li class="nav-item">
-                    <asp:HyperLink ID="HyperLink4" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/ContactCategory/ContactCategoryList.aspx">
+                    <asp:HyperLink ID="HyperLink4" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/ContactCategory/List">
                         <i class="bi bi-grid"></i>
                         <span>Contact Category</span>
                     </asp:HyperLink>
                 </li>
 
                 <li class="nav-item">
-                    <asp:HyperLink ID="HyperLink5" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/Contact/ContactList.aspx">
+                    <asp:HyperLink ID="HyperLink5" runat="server" CssClass="nav-link" NavigateUrl="~/Pages/Contact/List">
                         <i class="bi bi-grid"></i>
                         <span>Contact</span>
                     </asp:HyperLink>

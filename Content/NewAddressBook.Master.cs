@@ -14,10 +14,11 @@ namespace AddressBookNew.Content
             if (Session["UserID"] != null)
             {
                 lblUserName.Text = Session["UserName"].ToString().Trim();
+                imgProfile.ImageUrl = Session["ProfilePath"].ToString().Trim();
             }
             else
             {
-                Response.Redirect("~/Pages/Login.aspx", true);
+                Response.Redirect("~/Pages/Login", true);
             }
         }
 
@@ -25,12 +26,12 @@ namespace AddressBookNew.Content
         {
             Session.Clear();
 
-            Response.Redirect("~/Pages/Login.aspx", true);
+            Response.Redirect("~/Pages/Login", true);
         }
 
         protected void lbtnProfile_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/Profile.aspx", true);
+            Response.Redirect("~/Pages/Profile", true);
         }
     }
 }

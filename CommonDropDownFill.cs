@@ -11,6 +11,7 @@ namespace AddressBookNew
 {
     public class CommonDropDownFill
     {
+        #region Fill Drop down of Country
         public static void FillCountryDropDown(DropDownList ddl, String userID)
         {
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
@@ -47,7 +48,9 @@ namespace AddressBookNew
                     objConn.Close();
             }
         }
+        #endregion
 
+        #region Fill State Dropdown Based on selected country
         public static void FillStateDropDown(DropDownList ddl, String userID, String countryID)
         {
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
@@ -85,7 +88,9 @@ namespace AddressBookNew
                     objConn.Close();
             }
         }
+        #endregion
 
+        #region Fill City Dropdown based on Selected State
         public static void FillCityDropDown(DropDownList ddl, String userID, String stateID)
         {
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
@@ -123,5 +128,6 @@ namespace AddressBookNew
                     objConn.Close();
             }
         }
+        #endregion
     }
 }

@@ -13,24 +13,37 @@ namespace AddressBookNew.Pages.Contact
 {
     public partial class ContactAddEdit : System.Web.UI.Page
     {
+        #region XML for Storing Records
+        public void xmlData()
+        {
+            ViewState["ContactRecordsXml"] = "";
+            ViewState["idForContactNodes"] = 0;
+        }
+        #endregion
+
+        #region Page Load
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                xmlData();
+
                 FillDropDown();
                 FillCBLContactCategoryID();
 
-                if (Request.QueryString["ContactID"] != null)
+                if (Page.RouteData.Values["ContactID"] != null)
                 {
-                    lblMessage.Text = "Edit Contact " + Request.QueryString["ContactID"].ToString();
-                    FillControls(Convert.ToInt32(Request.QueryString["ContactID"]));
-                    FillContactCategoryIDByContactID(Convert.ToInt32(Request.QueryString["ContactID"].ToString().Trim()));
+                    lblMessage.Text = "Edit Contact ";
+                    btnAddMore.Visible = false;
+                    FillControls(Convert.ToInt32(EncryptDecrypt.Decrypt(Page.RouteData.Values["ContactID"].ToString())));
+                    FillContactCategoryIDByContactID(Convert.ToInt32(EncryptDecrypt.Decrypt(Page.RouteData.Values["ContactID"].ToString().Trim())));
                 }
                 else
                     lblMessage.Text = "Add Contact";
             }
             
         }
+        #endregion
 
         #region FillCommonDropDown
         private void FillDropDown()
@@ -121,61 +134,117 @@ namespace AddressBookNew.Pages.Contact
                 cmd.Connection = conn;
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@ContactName", strContactName);
-                cmd.Parameters.AddWithValue("@Gender", strGender);
-                cmd.Parameters.AddWithValue("@MobileNo", strMobileNo);
-                cmd.Parameters.AddWithValue("@Email", strEmail);
-                cmd.Parameters.AddWithValue("@CountryID", strCountryID);
-                cmd.Parameters.AddWithValue("@StateID", strStateID);
-                cmd.Parameters.AddWithValue("@CityID", strCityID);
-
                 if (Session["UserID"] != null)
                     cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString().Trim());
-                    
-                if (Request.QueryString["ContactID"] != null)
+
+                #region Multiple Records Insert
+                if (ViewState["ContactRecordsXml"] != "")
                 {
-                    cmd.Parameters.AddWithValue("@ContactID", Request.QueryString["ContactID"].ToString().Trim());
-                    cmd.CommandText = "[PR_Contact_Update]";
+                    ViewState["ContactRecordsXml"] = "<Contacts>" + ViewState["ContactRecordsXml"].ToString();
+
+                    ViewState["ContactRecordsXml"] += $"<ContactNode id=\"{ViewState["idForContactNodes"].ToString()}\" ><ContactName>" + strContactName.ToString() +
+                                                "</ContactName><Gender>" + strGender.ToString() +
+                                                "</Gender><MobileNo>" + strMobileNo.ToString() +
+                                                "</MobileNo><Email>" + strEmail.ToString() +
+                                                "</Email><CityID>" + strCityID.ToString() +
+                                                "</CityID><StateID>" + strStateID.ToString() +
+                                                "</StateID><CountryID>" + strCountryID.ToString() +
+                                                "</CountryID><ContactCategories>";
+
+                    foreach (ListItem li in cblContactCategoryID.Items)
+                    {
+                        if (li.Selected)
+                        {
+
+                            ViewState["ContactRecordsXml"] += "<ContactCategory><ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID></ContactCategory>";
+                        }
+                    }
+                    ViewState["ContactRecordsXml"] += "</ContactCategories></ContactNode>";
+
+                    ViewState["ContactRecordsXml"] += "</Contacts>";
+
+                    cmd.Parameters.AddWithValue("@xml", ViewState["ContactRecordsXml"].ToString());
+                    cmd.CommandText = "[PR_Contact_MultiInsert]";
+
                     cmd.ExecuteNonQuery();
-                }
-                else
-                {
-                    cmd.Parameters.Add("@ContactID", System.Data.SqlDbType.Int, 4).Direction = System.Data.ParameterDirection.Output;
-                    cmd.CommandText = "[PR_Contact_Insert]";
-                    cmd.ExecuteNonQuery();
+
+                    lblMessage.Text = "Contacts Inserted Successfully.";
+
+                    ViewState["idForContactNodes"] = 0;
+                    ViewState["ContactRecordsXml"] = "";
                     txtContactName.Text = "";
+                    rbtnlGender.ClearSelection();
+                    txtMobileNo.Text = "";
+                    txtEmail.Text = "";
+                    cblContactCategoryID.ClearSelection();
+                    ddlCountryID.ClearSelection();
+                    ddlStateID.ClearSelection();
+                    ddlCityID.ClearSelection();
                     txtContactName.Focus();
                 }
-
-                SqlInt32 ContactID = 0;
-                if (Request.QueryString["ContactID"] != null)
-                    ContactID = Convert.ToInt32(Request.QueryString["ContactID"]);
+                #endregion
                 else
-                    ContactID = Convert.ToInt32(cmd.Parameters["@ContactID"].Value);
-
-                String xml = "<ContactWiseContactCategory>";
-                SqlCommand objCmdContactCategory = conn.CreateCommand();
-                objCmdContactCategory.CommandType = System.Data.CommandType.StoredProcedure;
-                objCmdContactCategory.CommandText = "[PR_ContactWiseContactCategory_Insert]";
-                objCmdContactCategory.Parameters.Add("@ContactID", System.Data.SqlDbType.Int).Value = ContactID;
-                foreach (ListItem li in cblContactCategoryID.Items)
                 {
-                    if (li.Selected)
+                    cmd.Parameters.AddWithValue("@ContactName", strContactName);
+                    cmd.Parameters.AddWithValue("@Gender", strGender);
+                    cmd.Parameters.AddWithValue("@MobileNo", strMobileNo);
+                    cmd.Parameters.AddWithValue("@Email", strEmail);
+                    cmd.Parameters.AddWithValue("@CountryID", strCountryID);
+                    cmd.Parameters.AddWithValue("@StateID", strStateID);
+                    cmd.Parameters.AddWithValue("@CityID", strCityID);
+
+                    if (Page.RouteData.Values["ContactID"] != null)
                     {
-
-                        xml += "<ContactNode><ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID><ContactID>" + ContactID.ToString() + "</ContactID></ContactNode>";
+                        cmd.Parameters.AddWithValue("@ContactID", EncryptDecrypt.Decrypt(Page.RouteData.Values["ContactID"].ToString().Trim()));
+                        cmd.CommandText = "[PR_Contact_Update]";
+                        cmd.ExecuteNonQuery();
                     }
+                    else
+                    {
+                        cmd.Parameters.Add("@ContactID", System.Data.SqlDbType.Int, 4).Direction = System.Data.ParameterDirection.Output;
+                        cmd.CommandText = "[PR_Contact_Insert]";
+                        cmd.ExecuteNonQuery();
+                        txtContactName.Text = "";
+                        rbtnlGender.ClearSelection();
+                        txtMobileNo.Text = "";
+                        txtEmail.Text = "";
+                        cblContactCategoryID.ClearSelection();
+                        ddlCountryID.ClearSelection();
+                        ddlStateID.ClearSelection();
+                        ddlCityID.ClearSelection();
+                        txtContactName.Focus();
+                    }
+
+                    SqlInt32 ContactID = 0;
+                    if (Page.RouteData.Values["ContactID"] != null)
+                        ContactID = Convert.ToInt32(EncryptDecrypt.Decrypt(Page.RouteData.Values["ContactID"].ToString()));
+                    else
+                        ContactID = Convert.ToInt32(cmd.Parameters["@ContactID"].Value);
+
+                    String xml = "<ContactWiseContactCategory>";
+                    SqlCommand objCmdContactCategory = conn.CreateCommand();
+                    objCmdContactCategory.CommandType = System.Data.CommandType.StoredProcedure;
+                    objCmdContactCategory.CommandText = "[PR_ContactWiseContactCategory_Insert]";
+                    objCmdContactCategory.Parameters.Add("@ContactID", System.Data.SqlDbType.Int).Value = ContactID;
+                    foreach (ListItem li in cblContactCategoryID.Items)
+                    {
+                        if (li.Selected)
+                        {
+
+                            xml += "<ContactNode><ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID><ContactID>" + ContactID.ToString() + "</ContactID></ContactNode>";
+                        }
+                    }
+                    xml += "</ContactWiseContactCategory>";
+                    objCmdContactCategory.Parameters.AddWithValue("@xml", xml);
+                    objCmdContactCategory.ExecuteNonQuery();
+
+
+
+                    lblMessage.Text = "Data inserted Successfully. ";
+                    lblMessage.Attributes.Add("class", "text-success");
+                    Response.Redirect("~/Pages/Contact/List", false);
                 }
-                xml += "</ContactWiseContactCategory>";
-                objCmdContactCategory.Parameters.AddWithValue("@xml", xml);
-                objCmdContactCategory.ExecuteNonQuery();
-
-
-
-                lblMessage.Text = "Data inserted Successfully. ";
-                lblMessage.Attributes.Add("class", "text-success");
-                Response.Redirect("~/Pages/Contact/ContactList.aspx", false);
-                //Response.Redirect("~/AdminPanel/Contact/ContactList.aspx");
+                
             }
             catch (Exception ex)
             {
@@ -278,7 +347,7 @@ namespace AddressBookNew.Pages.Contact
                     {
                         Text = sdr["ContactCategoryName"].ToString(),
                         Value = sdr["ContactCategoryID"].ToString(),
-                        Selected = (Convert.ToInt32(sdr["IsSelected"]) == 1)
+                        Selected = Convert.ToBoolean(sdr["IsSelected"])
                     };
                     cblContactCategoryID.Items.Add(item);
                 }
@@ -294,13 +363,6 @@ namespace AddressBookNew.Pages.Contact
                     conn.Close();
             }
 
-        }
-        #endregion
-
-        #region Button Cancel Click
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("~/Pages/Contact/ContactList.aspx");
         }
         #endregion
 
@@ -389,6 +451,100 @@ namespace AddressBookNew.Pages.Contact
 
             }
 
+        }
+        #endregion
+
+        #region Button Add More Click event for Multiple Insert
+        protected void btnAddMore_Click(object sender, EventArgs e)
+        {
+            #region Local Variables
+            SqlString strContactName = SqlString.Null;
+
+            SqlString strGender = SqlString.Null;
+            SqlString strMobileNo = SqlString.Null;
+            SqlString strEmail = SqlString.Null;
+            SqlString str = SqlString.Null;
+            SqlString strCountryID = SqlString.Null;
+            SqlString strStateID = SqlString.Null;
+            SqlString strCityID = SqlString.Null;
+
+            String errorMessage = "";
+            #endregion
+
+            #region Server Side Validations
+            if (txtContactName.Text.Trim() == "")
+                errorMessage += "Enter ContactName<br/>";
+            else
+                strContactName = txtContactName.Text.Trim();
+
+            if (txtMobileNo.Text.Trim() == "")
+                errorMessage += "Enter Mobile No <br/>";
+            else
+                strMobileNo = txtMobileNo.Text.Trim();
+
+            if (txtEmail.Text.Trim() == "")
+                errorMessage += "Enter Email<br/>";
+            else
+                strEmail = txtEmail.Text.Trim();
+
+            if (rbtnlGender.SelectedValue == "")
+                errorMessage += "Select Gender<br/>";
+            else
+                strGender = rbtnlGender.Text.Trim();
+
+            if (ddlCountryID.SelectedIndex == 0)
+                errorMessage += "Select Country<br/>";
+            else
+                strCountryID = ddlCountryID.Text.Trim();
+
+            if (ddlStateID.SelectedIndex == 0)
+                errorMessage += "Select State<br/>";
+            else
+                strStateID = ddlStateID.Text.Trim();
+
+            if (ddlCityID.SelectedIndex == 0)
+                errorMessage += "Select City<br/>";
+            else
+                strCityID = ddlCityID.Text.Trim();
+
+            if (errorMessage != "")
+            {
+                lblMessage.Text = errorMessage;
+                lblMessage.Attributes.Add("class", "text-danger");
+                return;
+            }
+            #endregion
+
+            ViewState["ContactRecordsXml"] += $"<ContactNode id=\"{ViewState["idForContactNodes"].ToString()}\"><ContactName>" + strContactName.ToString() + 
+                                                "</ContactName><Gender>" + strGender.ToString() + 
+                                                "</Gender><MobileNo>" + strMobileNo.ToString() + 
+                                                "</MobileNo><Email>" + strEmail.ToString() + 
+                                                "</Email><CityID>" + strCityID.ToString() + 
+                                                "</CityID><StateID>" + strStateID.ToString() +  
+                                                "</StateID><CountryID>" + strCountryID.ToString() +
+                                                "</CountryID><ContactCategories>";
+
+            foreach (ListItem li in cblContactCategoryID.Items)
+            {
+                if (li.Selected)
+                {
+
+                    ViewState["ContactRecordsXml"] += "<ContactCategory><ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID></ContactCategory>";
+                }
+            }
+            ViewState["ContactRecordsXml"] += "</ContactCategories></ContactNode>";
+
+            ViewState["idForContactNodes"] = (Convert.ToInt32(ViewState["idForContactNodes"]) + 1).ToString();
+
+            txtContactName.Text = "";
+            rbtnlGender.ClearSelection();
+            txtMobileNo.Text = "";
+            txtEmail.Text = "";
+            cblContactCategoryID.ClearSelection();
+            ddlCountryID.ClearSelection();
+            ddlStateID.ClearSelection();
+            ddlCityID.ClearSelection();
+            txtContactName.Focus();
         }
         #endregion
     }

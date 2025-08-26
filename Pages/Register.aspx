@@ -78,6 +78,12 @@
                                             </div>
 
                                             <div class="col-12">
+                                                <asp:Label ID="lblAddress" runat="server" Text="Address" CssClass="form-label"></asp:Label>
+                                                <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" placeholder="Enter Your Address..."></asp:TextBox>
+                                                <div class="invalid-feedback">Please enter Address!</div>
+                                            </div>
+
+                                            <div class="col-12">
                                                 <asp:Label ID="lblPassword" runat="server" Text="Password" CssClass="form-label"></asp:Label>
                                                 <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" placeholder="Enter Password..."></asp:TextBox>
                                                 <div class="invalid-feedback">Please enter your password!</div>
@@ -91,7 +97,7 @@
                                             <div class="col-12">
                                                 <p class="small mb-0">
                                                     Already have an account?
-                                                    <asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/Pages/Login.aspx">Login</asp:HyperLink>
+                                                    <asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/Pages/Login">Login</asp:HyperLink>
                                                 </p>
                                             </div>
 

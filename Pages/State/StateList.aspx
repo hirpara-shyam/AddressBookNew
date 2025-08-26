@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="container">
+    <div class="container card p-4">
     <div class="row">
         <div class="col-12">
             <h1>State List</h1>
@@ -15,21 +15,33 @@
 
     <div class="row">
         <div class="col-md-12">
-            <asp:HyperLink ID="hlAddState" runat="server" CssClass="btn btn-primary" NavigateUrl="~/Pages/State/StateAddEdit.aspx">Add new State</asp:HyperLink>
+            <asp:HyperLink ID="hlAddState" runat="server" CssClass="btn btn-primary" NavigateUrl="~/Pages/State/Add">Add new State</asp:HyperLink>
+            <asp:Button ID="hlExportToExcel" runat="server" CssClass="btn btn-primary" OnClick="ExportToExcelUsingEPPlus" Text="Export to Excel"></asp:Button>
+            <asp:Button ID="btnDeleteMultiple" runat="server" CssClass="btn btn-primary" OnClick="btnDeleteMultiple_Click" Text="Delete Selected Rows"></asp:Button>
         </div>
     </div>
+    <hr />
 
     <div class="row">
         <div class="col-md-12">
-            <asp:GridView ID="gvState" runat="server" AutoGenerateColumns="false" CssClass="table table-hover" OnRowCommand="gvState_RowCommand">
+            <asp:GridView ID="gvState" runat="server" DataKeyNames="StateID" AutoGenerateColumns="false" CssClass="table table-hover" OnRowCommand="gvState_RowCommand">
                 <Columns>
-                    <asp:BoundField DataField="StateID" HeaderText="State ID" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <asp:CheckBox runat="server" ID="cbSelectAll" OnCheckedChanged="chkSelectAll_CheckedChanged" AutoPostBack="true" />
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:CheckBox ID="cbDeleteMany" runat="server" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <%--<asp:BoundField DataField="StateID" HeaderText="State ID" />--%>
                     <asp:BoundField DataField="CountryName" HeaderText="Country Name" />
                     <asp:BoundField DataField="StateName" HeaderText="State Name" />
 
                     <asp:TemplateField HeaderText="Edit">
                         <ItemTemplate>
-                            <asp:HyperLink ID="btnEdit" CssClass="btn btn-primary" runat="server" Text="Edit" NavigateUrl='<%# "~/Pages/State/StateAddEdit.aspx?StateID=" + Eval("StateID").ToString().Trim() %>' />
+                            <asp:HyperLink ID="btnEdit" CssClass="btn btn-primary" runat="server" Text="Edit" NavigateUrl='<%# "~/Pages/State/Edit/" + AddressBookNew.EncryptDecrypt.Encrypt(Eval("StateID").ToString().Trim()) %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
 

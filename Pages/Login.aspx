@@ -84,7 +84,7 @@
 
                                         <div class="col-12">
                                             <p class="small mb-0">Don't have account?
-                                                <asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="~/Pages/Register.aspx">Create An Account</asp:HyperLink></p>
+                                                <asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="~/Pages/Register">Create An Account</asp:HyperLink></p>
                                         </div>
 
                                         <div class="col-12">

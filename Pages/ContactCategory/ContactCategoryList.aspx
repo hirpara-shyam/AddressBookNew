@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="container">
+    <div class="container card p-4">
     <div class="row">
         <div class="col-12">
             <h1>ContactCategory List</h1>
@@ -15,20 +15,32 @@
 
     <div class="row">
         <div class="col-md-12">
-            <asp:HyperLink ID="hlAddContactCategory" runat="server" CssClass="btn btn-primary" NavigateUrl="~/Pages/ContactCategory/ContactCategoryAddEdit.aspx">Add new ContactCategory</asp:HyperLink>
+            <asp:HyperLink ID="hlAddContactCategory" runat="server" CssClass="btn btn-primary" NavigateUrl="~/Pages/ContactCategory/Add">Add new ContactCategory</asp:HyperLink>
+            <asp:Button ID="hlExportToExcel" runat="server" CssClass="btn btn-primary" OnClick="ExportToExcelUsingEPPlus" Text="Export to Excel"></asp:Button>
+            <asp:Button ID="btnDeleteMultiple" runat="server" CssClass="btn btn-primary" OnClick="btnDeleteMultiple_Click" Text="Delete Selected Rows"></asp:Button>
         </div>
     </div>
+    <hr />
 
     <div class="row">
         <div class="col-md-12">
-            <asp:GridView ID="gvContactCategory" runat="server" AutoGenerateColumns="false" CssClass="table table-hover" OnRowCommand="gvContactCategory_RowCommand">
+            <asp:GridView ID="gvContactCategory" runat="server" DataKeyNames="ContactCategoryID" AutoGenerateColumns="false" CssClass="table table-hover" OnRowCommand="gvContactCategory_RowCommand">
                 <Columns>
-                    <asp:BoundField DataField="ContactCategoryID" HeaderText="ContactCategory ID" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <asp:CheckBox runat="server" ID="cbSelectAll" OnCheckedChanged="chkSelectAll_CheckedChanged" AutoPostBack="true" />
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:CheckBox ID="cbDeleteMany" runat="server" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <%--<asp:BoundField DataField="ContactCategoryID" HeaderText="ContactCategory ID" />--%>
                     <asp:BoundField DataField="ContactCategoryName" HeaderText="ContactCategory Name" />
 
                     <asp:TemplateField HeaderText="Edit">
                         <ItemTemplate>
-                            <asp:HyperLink ID="btnEdit" CssClass="btn btn-primary" runat="server" Text="Edit" NavigateUrl='<%# "~/Pages/ContactCategory/ContactCategoryAddEdit.aspx?ContactCategoryID=" + Eval("ContactCategoryID").ToString().Trim() %>' />
+                            <asp:HyperLink ID="btnEdit" CssClass="btn btn-primary" runat="server" Text="Edit" NavigateUrl='<%# "~/Pages/ContactCategory/Edit/" + AddressBookNew.EncryptDecrypt.Encrypt(Eval("ContactCategoryID").ToString().Trim()) %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
 

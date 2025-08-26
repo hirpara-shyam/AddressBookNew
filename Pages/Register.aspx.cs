@@ -17,17 +17,22 @@ namespace AddressBookNew.Pages
 
         }
 
+        #region On Click of Register
         protected void btnRegister_Click(object sender, EventArgs e)
         {
+            #region local variables
             SqlString userName = SqlString.Null;
             SqlString password = SqlString.Null;
             SqlString email = SqlString.Null;
             SqlString mobileNo = SqlString.Null;
+            SqlString address = SqlString.Null;
             String errMessage = "";
+            #endregion
 
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
             try
             {
+                #region Server side validation
                 if (txtUserName.Text.ToString().Trim() == "")
                 {
                     errMessage += " - Please Enter Username <br/>";
@@ -64,10 +69,20 @@ namespace AddressBookNew.Pages
                     mobileNo = txtMobileNo.Text.ToString().Trim();
                 }
 
+                if (txtAddress.Text.ToString().Trim() == "")
+                {
+                    errMessage += " - Please Enter Your Address <br/>";
+                }
+                else
+                {
+                    address = txtAddress.Text.ToString().Trim();
+                }
+
                 if (errMessage.Trim() != "")
                 {
                     lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
                 }
+                #endregion
 
                 if (objConn.State != System.Data.ConnectionState.Open)
                     objConn.Open();
@@ -80,10 +95,11 @@ namespace AddressBookNew.Pages
                 cmd.Parameters.AddWithValue("@Password", password);
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@MobileNo", mobileNo);
+                cmd.Parameters.AddWithValue("@Address", address);
 
                 cmd.ExecuteNonQuery();
 
-                Response.Redirect("~/Pages/Login.aspx");
+                Response.Redirect("~/Pages/Login");
             }
             catch (Exception ex)
             {
@@ -95,5 +111,6 @@ namespace AddressBookNew.Pages
                     objConn.Close();
             }
         }
+        #endregion
     }
 }

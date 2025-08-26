@@ -1,24 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|c:\\users\\shyam\\source\\repos\\addressbooknew\\pages\\profile.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|solutionrelative:pages\\profile.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\pages\\profile.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|solutionrelative:pages\\profile.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\content\\newaddressbook.master.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|solutionrelative:content\\newaddressbook.master.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\content\\newaddressbook.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
-      "RelativeMoniker": "D:0:0:{F7C4D12B-438E-4D00-B1A7-D7ED409B4E0C}|AddressBookNew.csproj|solutionrelative:content\\newaddressbook.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -26,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -35,58 +18,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Profile.aspx.cs",
-              "DocumentMoniker": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Pages\\Profile.aspx.cs",
-              "RelativeDocumentMoniker": "Pages\\Profile.aspx.cs",
-              "ToolTip": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Pages\\Profile.aspx.cs",
-              "RelativeToolTip": "Pages\\Profile.aspx.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAqwC8AAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-23T10:48:51.21Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Profile.aspx",
-              "DocumentMoniker": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Pages\\Profile.aspx",
-              "RelativeDocumentMoniker": "Pages\\Profile.aspx",
-              "ToolTip": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Pages\\Profile.aspx",
-              "RelativeToolTip": "Pages\\Profile.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-08-23T09:53:47.74Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "NewAddressBook.Master.cs",
-              "DocumentMoniker": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Content\\NewAddressBook.Master.cs",
-              "RelativeDocumentMoniker": "Content\\NewAddressBook.Master.cs",
-              "ToolTip": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Content\\NewAddressBook.Master.cs",
-              "RelativeToolTip": "Content\\NewAddressBook.Master.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-23T05:50:20.441Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "NewAddressBook.Master",
-              "DocumentMoniker": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Content\\NewAddressBook.Master",
-              "RelativeDocumentMoniker": "Content\\NewAddressBook.Master",
-              "ToolTip": "C:\\Users\\Shyam\\source\\repos\\AddressBookNew\\Content\\NewAddressBook.Master",
-              "RelativeToolTip": "Content\\NewAddressBook.Master",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-08-23T05:45:29.769Z",
-              "EditorCaption": ""
             }
           ]
         }
