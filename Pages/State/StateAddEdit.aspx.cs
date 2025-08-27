@@ -72,11 +72,13 @@ namespace AddressBookNew.Pages.State
                 else
                 {
                     lblMessage.Text = "No data found.";
+                    lblMessage.Attributes.Add("class", "text-info");
                 }
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -96,6 +98,7 @@ namespace AddressBookNew.Pages.State
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
             try
             {
+                #region Server Side Validation
                 if (ddlCountry.SelectedValue.ToString().Trim() == "-1")
                 {
                     errMessage += " - Please Select Country <br/>";
@@ -117,7 +120,10 @@ namespace AddressBookNew.Pages.State
                 if (errMessage.Trim() != "")
                 {
                     lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                    lblMessage.Attributes.Add("class", "text-danger");
+                    return;
                 }
+                #endregion
 
                 if (objConn.State != System.Data.ConnectionState.Open)
                     objConn.Open();
@@ -141,6 +147,7 @@ namespace AddressBookNew.Pages.State
                     cmd.ExecuteNonQuery();
 
                     lblMessage.Text = "States Inserted Successfully.";
+                    lblMessage.Attributes.Add("class", "text-success");
 
                     ViewState["StateRecordsXml"] = "";
                     ddlCountry.SelectedIndex = 0;
@@ -169,6 +176,7 @@ namespace AddressBookNew.Pages.State
                         cmd.ExecuteNonQuery();
 
                         lblMessage.Text = "State Inserted Successfully.";
+                        lblMessage.Attributes.Add("class", "text-success");
 
                         ddlCountry.SelectedValue = "-1";
                         txtStateName.Text = "";
@@ -179,6 +187,7 @@ namespace AddressBookNew.Pages.State
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -191,6 +200,7 @@ namespace AddressBookNew.Pages.State
         #region Button Add More Click event for Multiple Insert
         protected void btnAddMore_Click(object sender, EventArgs e)
         {
+            #region Local Variables + Server Side Validation
             SqlString stateName = SqlString.Null;
             SqlString countryID = SqlString.Null;
             String errMessage = "";
@@ -216,8 +226,10 @@ namespace AddressBookNew.Pages.State
             if (errMessage.Trim() != "")
             {
                 lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                lblMessage.Attributes.Add("class", "text-danger");
                 return;
             }
+            #endregion
 
             ViewState["StateRecordsXml"] += "<StateNode><StateName>" + stateName.ToString() + "</StateName><CountryID>" + countryID.ToString() + "</CountryID></StateNode>";
             ddlCountry.SelectedIndex = 0;

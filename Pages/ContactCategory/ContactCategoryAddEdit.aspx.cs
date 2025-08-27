@@ -62,11 +62,13 @@ namespace AddressBookNew.Pages.ContactCategory
                 else
                 {
                     lblMessage.Text = "No data found.";
+                    lblMessage.Attributes.Add("class", "text-info");
                 }
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -85,6 +87,7 @@ namespace AddressBookNew.Pages.ContactCategory
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
             try
             {
+                #region Server Side Validation
                 if (txtContactCategoryName.Text.ToString().Trim() == "")
                 {
                     errMessage += " - Please Enter Contact Category name <br/>";
@@ -97,7 +100,10 @@ namespace AddressBookNew.Pages.ContactCategory
                 if (errMessage.Trim() != "")
                 {
                     lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                    lblMessage.Attributes.Add("class", "text-danger");
+                    return;
                 }
+                #endregion
 
                 if (objConn.State != System.Data.ConnectionState.Open)
                     objConn.Open();
@@ -121,6 +127,7 @@ namespace AddressBookNew.Pages.ContactCategory
                     cmd.ExecuteNonQuery();
 
                     lblMessage.Text = "Contact Categories Inserted Successfully.";
+                    lblMessage.Attributes.Add("class", "text-success");
 
                     ViewState["ContactCategoryRecordsXml"] = "";
                     txtContactCategoryName.Text = "";
@@ -147,6 +154,7 @@ namespace AddressBookNew.Pages.ContactCategory
                         cmd.ExecuteNonQuery();
 
                         lblMessage.Text = "Contact Category Inserted Successfully.";
+                        lblMessage.Attributes.Add("class", "text-success");
 
                         txtContactCategoryName.Text = "";
                         txtContactCategoryName.Focus();
@@ -156,6 +164,7 @@ namespace AddressBookNew.Pages.ContactCategory
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -168,6 +177,7 @@ namespace AddressBookNew.Pages.ContactCategory
         #region Button Add More Click event for Multiple Insert
         protected void btnAddMore_Click(object sender, EventArgs e)
         {
+            #region Local Variables + Server Side Validation
             SqlString contactCategoryName = SqlString.Null;
             String errMessage = "";
 
@@ -183,8 +193,10 @@ namespace AddressBookNew.Pages.ContactCategory
             if (errMessage.Trim() != "")
             {
                 lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                lblMessage.Attributes.Add("class", "text-danger");
                 return;
             }
+            #endregion
 
             ViewState["ContactCategoryRecordsXml"] += "<ContactCategoryNode><ContactCategoryName>" + contactCategoryName.ToString() + "</ContactCategoryName></ContactCategoryNode>";
             txtContactCategoryName.Text = "";

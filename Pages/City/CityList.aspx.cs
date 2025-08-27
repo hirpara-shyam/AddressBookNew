@@ -60,6 +60,7 @@ namespace AddressBookNew.Pages.City
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -99,10 +100,13 @@ namespace AddressBookNew.Pages.City
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/City/List");
+                lblMessage.Text = "City Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -198,10 +202,13 @@ namespace AddressBookNew.Pages.City
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/City/List");
+                lblMessage.Text = "All Selected Cities Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {

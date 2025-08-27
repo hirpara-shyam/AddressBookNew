@@ -12,10 +12,12 @@ namespace AddressBookNew.Pages.Country
 {
     public partial class CountryAddEdit : System.Web.UI.Page
     {
+        #region XML data
         private void xmlData()
         {
             ViewState["CountryRecordsXml"] = "";
         }
+        #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,11 +60,13 @@ namespace AddressBookNew.Pages.Country
                 else
                 {
                     lblMessage.Text = "No data found.";
+                    lblMessage.Attributes.Add("class", "text-info");
                 }
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -81,6 +85,7 @@ namespace AddressBookNew.Pages.Country
             SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["AddressBookConnectionString"].ConnectionString);
             try
             {
+                #region Server Side Validation
                 if (txtCountryName.Text.ToString().Trim() == "")
                 {
                     errMessage += " - Please Enter Country name <br/>";
@@ -93,7 +98,10 @@ namespace AddressBookNew.Pages.Country
                 if (errMessage.Trim() != "")
                 {
                     lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                    lblMessage.Attributes.Add("class", "text-danger");
+                    return;
                 }
+                #endregion
 
                 if (objConn.State != System.Data.ConnectionState.Open)
                     objConn.Open();
@@ -117,6 +125,7 @@ namespace AddressBookNew.Pages.Country
                     cmd.ExecuteNonQuery();
 
                     lblMessage.Text = "Countries Inserted Successfully.";
+                    lblMessage.Attributes.Add("class", "text-success");
 
                     ViewState["CountryRecordsXml"] = "";
                     txtCountryName.Text = "";
@@ -143,6 +152,7 @@ namespace AddressBookNew.Pages.Country
                         cmd.ExecuteNonQuery();
 
                         lblMessage.Text = "Country Inserted Successfully.";
+                        lblMessage.Attributes.Add("class", "text-success");
 
                         txtCountryName.Text = "";
                         txtCountryName.Focus();
@@ -152,6 +162,7 @@ namespace AddressBookNew.Pages.Country
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -164,6 +175,7 @@ namespace AddressBookNew.Pages.Country
         #region Button Add More Click event for Multiple Insert
         protected void btnAddMore_Click(object sender, EventArgs e)
         {
+            #region Local Variables + Server Side Validation
             SqlString countryName = SqlString.Null;
             String errMessage = "";
 
@@ -179,8 +191,10 @@ namespace AddressBookNew.Pages.Country
             if (errMessage.Trim() != "")
             {
                 lblMessage.Text = "Kindly solve Following error(s) <br/>" + errMessage;
+                lblMessage.Attributes.Add("class", "text-danger");
                 return;
             }
+            #endregion
 
             ViewState["CountryRecordsXml"] += "<CountryNode><CountryName>" + countryName.ToString() + "</CountryName></CountryNode>";
             txtCountryName.Text = "";

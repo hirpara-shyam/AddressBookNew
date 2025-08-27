@@ -51,7 +51,6 @@ namespace AddressBookNew.Pages.State
                 {
                     gvState.DataSource = objSDR;
                     gvState.DataBind();
-
                 }
                 else
                 {
@@ -61,6 +60,7 @@ namespace AddressBookNew.Pages.State
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -102,10 +102,13 @@ namespace AddressBookNew.Pages.State
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/State/List");
+                lblMessage.Text = "State Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -201,10 +204,12 @@ namespace AddressBookNew.Pages.State
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/State/List");
+                lblMessage.Text = "All Selected States Deleted Successfully.";
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {

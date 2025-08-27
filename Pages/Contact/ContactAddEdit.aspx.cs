@@ -17,7 +17,6 @@ namespace AddressBookNew.Pages.Contact
         public void xmlData()
         {
             ViewState["ContactRecordsXml"] = "";
-            ViewState["idForContactNodes"] = 0;
         }
         #endregion
 
@@ -108,6 +107,7 @@ namespace AddressBookNew.Pages.Contact
                 }
                 #endregion
 
+                #region Assigning Values
                 if (txtContactName.Text.Trim() != "")
                     strContactName = txtContactName.Text.Trim();
 
@@ -126,6 +126,7 @@ namespace AddressBookNew.Pages.Contact
                     strStateID = ddlStateID.SelectedValue;
                 if (ddlCityID.SelectedIndex > 0)
                     strCityID = ddlCityID.SelectedValue;
+                #endregion
 
                 if (conn.State != System.Data.ConnectionState.Open)
                     conn.Open();
@@ -142,24 +143,24 @@ namespace AddressBookNew.Pages.Contact
                 {
                     ViewState["ContactRecordsXml"] = "<Contacts>" + ViewState["ContactRecordsXml"].ToString();
 
-                    ViewState["ContactRecordsXml"] += $"<ContactNode id=\"{ViewState["idForContactNodes"].ToString()}\" ><ContactName>" + strContactName.ToString() +
+                    ViewState["ContactRecordsXml"] += $"<ContactNode><ContactName>" + strContactName.ToString() +
                                                 "</ContactName><Gender>" + strGender.ToString() +
                                                 "</Gender><MobileNo>" + strMobileNo.ToString() +
                                                 "</MobileNo><Email>" + strEmail.ToString() +
                                                 "</Email><CityID>" + strCityID.ToString() +
                                                 "</CityID><StateID>" + strStateID.ToString() +
                                                 "</StateID><CountryID>" + strCountryID.ToString() +
-                                                "</CountryID><ContactCategories>";
+                                                "</CountryID><CategoryXML>";
 
                     foreach (ListItem li in cblContactCategoryID.Items)
                     {
                         if (li.Selected)
                         {
 
-                            ViewState["ContactRecordsXml"] += "<ContactCategory><ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID></ContactCategory>";
+                            ViewState["ContactRecordsXml"] += $"<ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID>";
                         }
                     }
-                    ViewState["ContactRecordsXml"] += "</ContactCategories></ContactNode>";
+                    ViewState["ContactRecordsXml"] += "</CategoryXML></ContactNode>";
 
                     ViewState["ContactRecordsXml"] += "</Contacts>";
 
@@ -169,8 +170,8 @@ namespace AddressBookNew.Pages.Contact
                     cmd.ExecuteNonQuery();
 
                     lblMessage.Text = "Contacts Inserted Successfully.";
+                    lblMessage.Attributes.Add("class", "text-success");
 
-                    ViewState["idForContactNodes"] = 0;
                     ViewState["ContactRecordsXml"] = "";
                     txtContactName.Text = "";
                     rbtnlGender.ClearSelection();
@@ -208,7 +209,6 @@ namespace AddressBookNew.Pages.Contact
                         rbtnlGender.ClearSelection();
                         txtMobileNo.Text = "";
                         txtEmail.Text = "";
-                        cblContactCategoryID.ClearSelection();
                         ddlCountryID.ClearSelection();
                         ddlStateID.ClearSelection();
                         ddlCityID.ClearSelection();
@@ -316,7 +316,6 @@ namespace AddressBookNew.Pages.Contact
             {
                 if (conn.State == System.Data.ConnectionState.Open)
                     conn.Close();
-
             }
         }
         #endregion
@@ -515,26 +514,24 @@ namespace AddressBookNew.Pages.Contact
             }
             #endregion
 
-            ViewState["ContactRecordsXml"] += $"<ContactNode id=\"{ViewState["idForContactNodes"].ToString()}\"><ContactName>" + strContactName.ToString() + 
+            ViewState["ContactRecordsXml"] += $"<ContactNode><ContactName>" + strContactName.ToString() + 
                                                 "</ContactName><Gender>" + strGender.ToString() + 
                                                 "</Gender><MobileNo>" + strMobileNo.ToString() + 
                                                 "</MobileNo><Email>" + strEmail.ToString() + 
                                                 "</Email><CityID>" + strCityID.ToString() + 
                                                 "</CityID><StateID>" + strStateID.ToString() +  
                                                 "</StateID><CountryID>" + strCountryID.ToString() +
-                                                "</CountryID><ContactCategories>";
+                                                "</CountryID><CategoryXML>";
 
             foreach (ListItem li in cblContactCategoryID.Items)
             {
                 if (li.Selected)
                 {
 
-                    ViewState["ContactRecordsXml"] += "<ContactCategory><ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID></ContactCategory>";
+                    ViewState["ContactRecordsXml"] += $"<ContactCategoryID>" + li.Value.ToString() + "</ContactCategoryID>";
                 }
             }
-            ViewState["ContactRecordsXml"] += "</ContactCategories></ContactNode>";
-
-            ViewState["idForContactNodes"] = (Convert.ToInt32(ViewState["idForContactNodes"]) + 1).ToString();
+            ViewState["ContactRecordsXml"] += "</CategoryXML></ContactNode>";
 
             txtContactName.Text = "";
             rbtnlGender.ClearSelection();

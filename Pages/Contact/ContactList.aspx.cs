@@ -86,6 +86,8 @@ namespace AddressBookNew.Pages.Contact
 
 
             Response.Redirect("~/Pages/Contact/List");
+            lblMessage.Text = "Contact Deleted Successfully.";
+            lblMessage.Attributes.Add("class", "text-success");
 
             FillGridView();
         }
@@ -177,10 +179,13 @@ namespace AddressBookNew.Pages.Contact
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/Contact/List");
+                lblMessage.Text = "Contacts Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {

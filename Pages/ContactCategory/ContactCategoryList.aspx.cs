@@ -61,6 +61,7 @@ namespace AddressBookNew.Pages.ContactCategory
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -102,10 +103,13 @@ namespace AddressBookNew.Pages.ContactCategory
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/ContactCategory/List");
+                lblMessage.Text = "Contact Category Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -201,10 +205,13 @@ namespace AddressBookNew.Pages.ContactCategory
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/ContactCategory/List");
+                lblMessage.Text = "All Selected Categories Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {

@@ -61,6 +61,7 @@ namespace AddressBookNew.Pages
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -102,10 +103,13 @@ namespace AddressBookNew.Pages
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/Country/List");
+                lblMessage.Text = "Country Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
@@ -201,10 +205,13 @@ namespace AddressBookNew.Pages
                 cmd.ExecuteNonQuery();
 
                 Response.Redirect("~/Pages/Country/List");
+                lblMessage.Text = "All Selected Countries Deleted Successfully.";
+                lblMessage.Attributes.Add("class", "text-success");
             }
             catch (Exception ex)
             {
                 lblMessage.Text += ex.Message;
+                lblMessage.Attributes.Add("class", "text-danger");
             }
             finally
             {
